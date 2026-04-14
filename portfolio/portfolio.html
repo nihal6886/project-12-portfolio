@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/213789045?v=4">
+</head>
+<body>
+    <img src="pngegg.png" class="desktop-mascot" alt="cat.png">
+    <div class="taskbar">
+        <span class="taskbar-title">nihal.portfolio</span>
+        <span class="taskbar-clock" id="clock"></span>
+    </div>
+
+    <div class="desktop" id="desktop">
+        <div id="loading-screen">
+    <div class="loader"></div>
+    <p>portfolio.os</p>
+</div>
+
+        <div class="icon" ondblclick="openWindow('about')">
+            <div class="icon-img">🗒</div>
+            <span>about.txt</span>
+        </div>
+
+        <div class="icon" ondblclick="openWindow('skills')">
+            <div class="icon-img">🗒</div>
+            <span>skills.md</span>
+        </div>
+
+        <div class="icon" ondblclick="openWindow('projects')">
+            <div class="icon-img">🗁</div>
+            <span>projects</span>
+        </div>
+
+        <div class="icon" ondblclick="openWindow('education')">
+            <div class="icon-img">🗁</div>
+            <span>education</span>
+        </div>
+
+        <div class="icon" ondblclick="openWindow('contact')">
+            <div class="icon-img">🖂</div>
+            <span>contact</span>
+        </div>
+
+        <div class="window" id="win-about">
+            <div class="window-titlebar" id="titlebar-about">
+                <span>about.txt</span>
+                <button onclick="closeWindow('about')">✕</button>
+            </div>
+            <div class="window-content">
+                <p>Hi, I'm Nihal.</p>
+                <p>A CSE student-</p>
+                <p>I love building clean, thoughtful interfaces.</p>
+            </div>
+        </div>
+
+        <div class="window" id="win-skills">
+            <div class="window-titlebar" id="titlebar-skills">
+                <span>skills.md</span>
+                <button onclick="closeWindow('skills')">✕</button>
+            </div>
+            <div class="window-content">
+                <p>#Skills</p>
+                <p>- HTML</p>
+                <p>- CSS</p>
+                <p>- JavaScript</p>
+                <p>- Python</p>
+                <p>- C++</p>
+                <p>- C</p>
+                <p>- DaVinci Resolve</p>
+                <p>- Photoshop</p>
+                <p>- Adobe After Effects</p>
+                <p>- Adobe Premiere Pro</p>
+            </div>
+        </div>
+
+        <div class="window" id="win-projects">
+            <div class="window-titlebar" id="titlebar-projects">
+                <span>projects/</span>
+                <button onclick="closeWindow('projects')">✕</button>
+            </div>
+            <div class="window-content" style="padding: 0;">
+                <div class="folder-header">
+                    <span>FOLDER CONTENTS</span>
+                    <span>1 item</span>
+                </div>
+                <div class="folder-item" ondblclick="openWindow('carousel')">
+                    <span class="folder-item-icon">🗀</span>
+                    <span class="folder-item-name">decouple-ai.proj</span>
+                    <span class="folder-item-type">PROJECT</span>
+                </div>
+                <div class="folder-item" ondblclick="openWindow('podcast')">
+                <span class="folder-item-icon" style="opacity:30%;">▷</span>
+                <span class="folder-item-name">podcast-edit.mov</span>
+                <span class="folder-item-type">VIDEO</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="win-carousel" style="width: 520px;">
+            <div class="window-titlebar" id="titlebar-carousel">
+                <span>decouple-ai.proj</span>
+                <button onclick="closeWindow('carousel')">✕</button>
+            </div>
+            <div class="window-content" style="padding: 0;">
+                <div class="carousel-viewer">
+                    <img id="carousel-img" src="slide1.png" alt="Slide 1">
+                    <div class="carousel-controls">
+                        <button onclick="prevSlide()">←</button>
+                        <span id="carousel-counter">1 / 4</span>
+                        <button onclick="nextSlide()">→</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="window" id="win-podcast" style="width: 560px;">
+        <div class="window-titlebar" id="titlebar-podcast">
+            <span>podcast-edit.mov</span>
+            <button onclick="closeWindow('podcast')">✕</button>
+        </div>
+            <div class="window-content" style="padding: 0; background: #000;">
+                <div class="video-viewer">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/6z9ObqWfx5w?si=drnzTqQowgTRgkN5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="win-education">
+            <div class="window-titlebar" id="titlebar-education">
+                <span>education/</span>
+                <button onclick="closeWindow('education')">✕</button>
+            </div>
+            <div class="window-content" style="padding: 0;">
+                <div class="folder-header">
+                    <span>FOLDER CONTENTS</span>
+                    <span>1 item</span>
+                </div>
+                <div class="folder-item" ondblclick="openWindow('edufile')">
+                    <span class="folder-item-icon">🗒</span>
+                    <span class="folder-item-name">education.txt</span>
+                    <span class="folder-item-type">TEXT</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="win-edufile">
+            <div class="window-titlebar" id="titlebar-edufile">
+                <span>education.txt</span>
+                <button onclick="closeWindow('edufile')">✕</button>
+            </div>
+            <div class="window-content">
+                <p>Degree  : B.Tech Computer Science Engineering</p>
+                <p>College : KMEA Engineering College</p>
+                <p>Year    : 2024 - 2028</p>
+            </div>
+        </div>
+        <div class="icon" ondblclick="openWindow('resume')">
+            <div class="icon-img" width="50" height="50">🗐</div>
+            <span>resume.pdf</span>
+        </div>
+        <div class="window" id="win-contact">
+            <div class="window-titlebar" id="titlebar-contact">
+                <span>contact</span>
+                <button onclick="closeWindow('contact')">✕</button>
+            </div>
+            <div class="window-content">
+                <p><a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJfmrkgckRRTKzDkZWSBctLSTkwBkVhJCxDsXdPKkfSSGdkdPRRLJfnxktxvTrcqzDnnzfg" target="_blank" class="contact-link">Email</a></p>
+                <p><a href="https://www.linkedin.com/in/ahmed-nihal-v-m-393a22315/" target="_blank" class="contact-link">LinkedIn</a></p>
+            </div>
+        </div>
+        <div class="window" id="win-resume" style="width: 520px;">
+    <div class="window-titlebar" id="titlebar-resume">
+        <span>resume.pdf</span>
+        <button onclick="closeWindow('resume')">✕</button>
+    </div>
+    <div class="window-content" style="padding: 0; height: 640px;height: 80vh;">
+        <div class="window-content" style="padding: 0; height: 640px;">
+    <object data="resume.pdf" type="application/pdf" width="100%" height="100%">
+        <div style="padding: 20px; color: white;">
+            <p>It looks like your browser doesn't support inline PDFs.</p>
+            <p><a href="resume.pdf" target="_blank" style="color: #ffa641;">Click here to download the resume</a></p>
+        </div>
+    </object>
+</div>
+    </div>
+</div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
