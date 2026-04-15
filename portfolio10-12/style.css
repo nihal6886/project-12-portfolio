@@ -265,3 +265,10 @@ body {
     text-decoration: underline; 
     text-shadow: 0 0 8px rgba(255, 166, 65, 0.6); 
 }
+
+#win-welcome {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+}

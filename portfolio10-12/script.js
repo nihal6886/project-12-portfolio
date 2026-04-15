@@ -11,18 +11,27 @@ function openWindow(name) {
     const win = document.getElementById('win-' + name);
     win.style.display = 'flex';
     bringToFront(win);
+
+    if (name === 'carousel') {
+        const img = document.getElementById('carousel-img');
+        if (!img.src || img.src === window.location.href) {
+            img.src = 'slide1.png';
+        }
+    }
+
+    if (name === 'podcast') {
+        const iframe = document.getElementById('podcast-iframe');
+        if (!iframe.src) {
+            iframe.src = iframe.dataset.src;
+        }
+    }
 }
 
 function closeWindow(name) {
-    const win = document.getElementById('win-' + name);
-    if (win) {
-        win.style.display = 'none';
-        
-        const iframes = win.getElementsByTagName('iframe');
-        for (let i = 0; i < iframes.length; i++) {
-            const currentSrc = iframes[i].src;
-            iframes[i].src = currentSrc; 
-        }
+    document.getElementById('win-' + name).style.display = 'none';
+
+    if (name === 'podcast') {
+        document.getElementById('podcast-iframe').src = '';
     }
 }
 
@@ -72,12 +81,12 @@ function prevSlide() {
     currentSlide = currentSlide === 1 ? totalSlides : currentSlide - 1;
     updateCarousel();
 }
-window.addEventListener('load', function() {
+
+window.addEventListener('load', function () {
     const loadingScreen = document.getElementById('loading-screen');
-    
     loadingScreen.style.opacity = '0';
-    
     setTimeout(() => {
         loadingScreen.style.display = 'none';
-    }, 500); 
+        openWindow('welcome');
+    }, 500);
 });
