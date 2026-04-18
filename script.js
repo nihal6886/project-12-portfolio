@@ -62,7 +62,28 @@ document.querySelectorAll('.window').forEach(win => {
     document.addEventListener('mouseup', () => {
         isDragging = false;
     });
+
+ 
+    titlebar.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        offsetX = e.touches[0].clientX - win.offsetLeft;
+        offsetY = e.touches[0].clientY - win.offsetTop;
+        bringToFront(win);
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            win.style.left = (e.touches[0].clientX - offsetX) + 'px';
+            win.style.top = (e.touches[0].clientY - offsetY) + 'px';
+            e.preventDefault(); 
+        }
+    }, { passive: false });
+
+    document.addEventListener('touchend', () => {
+        isDragging = false;
+    });
 });
+
 
 let currentSlide = 1;
 const totalSlides = 4;
@@ -89,4 +110,11 @@ window.addEventListener('load', function () {
         loadingScreen.style.display = 'none';
         openWindow('welcome');
     }, 500);
+
+    if (window.innerWidth <= 768) {
+        document.querySelectorAll('[ondblclick]').forEach(element => {
+            element.setAttribute('onclick', element.getAttribute('ondblclick'));
+            element.removeAttribute('ondblclick');
+        });
+    }
 });
