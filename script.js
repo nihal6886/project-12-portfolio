@@ -2,11 +2,14 @@
 function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
-    const mins = String(now.getMinutes()).padStart(2, '0');
+    const mins  = String(now.getMinutes()).padStart(2, '0');
     document.getElementById('clock').textContent = hours + ':' + mins;
 }
 updateClock();
 setInterval(updateClock, 1000);
+
+// === Z-index counter (each focused window always on top) ===
+let topZ = 20;
 
 // === Window management ===
 function openWindow(name) {
@@ -16,20 +19,15 @@ function openWindow(name) {
     bringToFront(win);
 
     if (name === 'carousel') {
-        const img = document.getElementById('carousel-img');
-        // Only set if not already showing a valid slide
-        if (!img.src || img.src === window.location.href || img.src.endsWith('/')) {
-            currentSlide = 1;
-            updateCarousel();
-        }
+        currentSlide = 1;
+        updateCarousel();
     }
 
     if (name === 'podcast') {
         const iframe = document.getElementById('podcast-iframe');
-        const savedSrc = iframe.dataset.src;
-        // Restore src from data-src if it was cleared on close
-        if (savedSrc && iframe.src !== savedSrc) {
-            iframe.src = savedSrc;
+        const src = iframe.dataset.src;
+        if (src && !iframe.src) {
+            iframe.src = src;
         }
     }
 }
@@ -41,81 +39,91 @@ function closeWindow(name) {
 
     if (name === 'podcast') {
         const iframe = document.getElementById('podcast-iframe');
-        // Store real src before clearing, so we can restore it on re-open
-        if (!iframe.dataset.src) {
-            iframe.dataset.src = iframe.src;
-        }
-        iframe.src = '';
+        iframe.src = ''; // stop video playback
     }
 }
 
 function bringToFront(win) {
-    document.querySelectorAll('.window').forEach(w => w.style.zIndex = 10);
-    win.style.zIndex = 20;
+    topZ++;
+    win.style.zIndex = topZ;
 }
 
 // === Dragging ===
+// Single shared drag state — avoids N duplicate listeners on document
+let dragWin     = null;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
 document.querySelectorAll('.window').forEach(win => {
     const titlebar = win.querySelector('.window-titlebar');
     if (!titlebar) return;
 
-    let isDragging = false;
-    let offsetX = 0, offsetY = 0;
-
     titlebar.addEventListener('mousedown', (e) => {
-        // Don't start drag if clicking the close button
         if (e.target.tagName === 'BUTTON') return;
-        isDragging = true;
-        offsetX = e.clientX - win.offsetLeft;
-        offsetY = e.clientY - win.offsetTop;
+
+        // Clear CSS transform (welcome window uses translate(-50%,-50%))
+        // getBoundingClientRect gives real screen position regardless of transform
+        const rect = win.getBoundingClientRect();
+        win.style.transform = 'none';
+        win.style.left = rect.left + 'px';
+        win.style.top  = rect.top  + 'px';
+
+        dragWin     = win;
+        dragOffsetX = e.clientX - rect.left;
+        dragOffsetY = e.clientY - rect.top;
         bringToFront(win);
         titlebar.style.cursor = 'grabbing';
+        e.preventDefault();
     });
 
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        win.style.left = (e.clientX - offsetX) + 'px';
-        win.style.top  = (e.clientY - offsetY) + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        titlebar.style.cursor = 'grab';
-    });
-
-    // Touch support for mobile
     titlebar.addEventListener('touchstart', (e) => {
         if (e.target.tagName === 'BUTTON') return;
         const touch = e.touches[0];
-        isDragging = true;
-        offsetX = touch.clientX - win.offsetLeft;
-        offsetY = touch.clientY - win.offsetTop;
+        const rect = win.getBoundingClientRect();
+        win.style.transform = 'none';
+        win.style.left = rect.left + 'px';
+        win.style.top  = rect.top  + 'px';
+
+        dragWin     = win;
+        dragOffsetX = touch.clientX - rect.left;
+        dragOffsetY = touch.clientY - rect.top;
         bringToFront(win);
     }, { passive: true });
 
-    document.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        const touch = e.touches[0];
-        win.style.left = (touch.clientX - offsetX) + 'px';
-        win.style.top  = (touch.clientY - offsetY) + 'px';
-    }, { passive: true });
-
-    document.addEventListener('touchend', () => {
-        isDragging = false;
-    });
-
-    // Click on window body brings it to front
     win.addEventListener('mousedown', () => bringToFront(win));
 });
+
+// One global move/end handler (not per-window)
+document.addEventListener('mousemove', (e) => {
+    if (!dragWin) return;
+    dragWin.style.left = (e.clientX - dragOffsetX) + 'px';
+    dragWin.style.top  = (e.clientY - dragOffsetY) + 'px';
+});
+
+document.addEventListener('mouseup', () => {
+    if (!dragWin) return;
+    const tb = dragWin.querySelector('.window-titlebar');
+    if (tb) tb.style.cursor = 'grab';
+    dragWin = null;
+});
+
+document.addEventListener('touchmove', (e) => {
+    if (!dragWin) return;
+    const touch = e.touches[0];
+    dragWin.style.left = (touch.clientX - dragOffsetX) + 'px';
+    dragWin.style.top  = (touch.clientY - dragOffsetY) + 'px';
+}, { passive: true });
+
+document.addEventListener('touchend', () => { dragWin = null; });
 
 // === Carousel ===
 let currentSlide = 1;
 const totalSlides = 4;
 
 function updateCarousel() {
-    const img = document.getElementById('carousel-img');
+    const img     = document.getElementById('carousel-img');
     const counter = document.getElementById('carousel-counter');
-    if (img) img.src = 'slide' + currentSlide + '.png';
+    if (img)     img.src = 'slide' + currentSlide + '.png';
     if (counter) counter.textContent = currentSlide + ' / ' + totalSlides;
 }
 
@@ -130,12 +138,16 @@ function prevSlide() {
 }
 
 // === Boot sequence ===
-// === Boot sequence ===
-setTimeout(() => {
+// DOMContentLoaded fires once HTML is parsed — does NOT wait for fonts,
+// images, favicon, or external resources. No more stuck loading screen.
+document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.getElementById('loading-screen');
-    loadingScreen.style.opacity = '0';
+
     setTimeout(() => {
-        loadingScreen.style.display = 'none';
-        openWindow('welcome');
-    }, 500);
-}, 1200);
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            openWindow('welcome');
+        }, 500);
+    }, 1000);
+});

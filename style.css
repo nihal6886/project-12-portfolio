@@ -14,13 +14,14 @@ body {
     cursor: default;
 }
 
+/* CRT scanline overlay */
 body::after {
     content: '';
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 99998;
+    z-index: 9000;
     background: repeating-linear-gradient(
         0deg,
         transparent,
@@ -30,6 +31,7 @@ body::after {
     );
 }
 
+/* === Taskbar === */
 .taskbar {
     height: 36px;
     background-color: #2C1A0E;
@@ -58,6 +60,7 @@ body::after {
     letter-spacing: 3px;
 }
 
+/* === Desktop === */
 .desktop {
     width: 100%;
     height: calc(100vh - 36px);
@@ -71,6 +74,7 @@ body::after {
     background-size: 24px 24px;
 }
 
+/* === Icons === */
 .icon {
     display: flex;
     flex-direction: column;
@@ -81,7 +85,6 @@ body::after {
     padding: 6px;
     border: 1px solid transparent;
     transition: background 0.1s, border-color 0.1s;
-    image-rendering: pixelated;
 }
 
 .icon:hover {
@@ -111,27 +114,38 @@ body::after {
     font-family: 'VT323', monospace;
     font-size: 14px;
     text-align: center;
-    text-shadow: 1px 1px 0px #2C1A0E, -1px -1px 0px #2C1A0E, 1px -1px 0px #2C1A0E, -1px 1px 0px #2C1A0E;
-    letter-spacing: 0.5px;
+    /* outline-style shadow for readability on orange background */
+    text-shadow:
+        1px  1px 0 #2C1A0E,
+       -1px -1px 0 #2C1A0E,
+        1px -1px 0 #2C1A0E,
+       -1px  1px 0 #2C1A0E;
     word-break: break-all;
+    letter-spacing: 0.5px;
 }
 
+/* === Window === */
 .window {
+    /* STRUCTURAL — required for display/layout */
     display: none;
     flex-direction: column;
     position: absolute;
     top: 80px;
     left: 120px;
     width: 380px;
-    background-color: #FAF7F2;
     min-height: 200px;
+    background-color: #FAF7F2;
     z-index: 10;
+
+    /* RETRO */
     border-radius: 0;
     border: 2px solid #2C1A0E;
     box-shadow: 6px 6px 0px #2C1A0E;
 }
 
+/* === Titlebar === */
 .window-titlebar {
+    /* STRUCTURAL */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -139,9 +153,10 @@ body::after {
     background-color: #2C1A0E;
     cursor: grab;
     user-select: none;
+
+    /* RETRO */
     font-family: 'VT323', monospace;
     font-size: 16px;
-    font-weight: normal;
     color: #ffa641;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -152,7 +167,9 @@ body::after {
     cursor: grabbing;
 }
 
+/* === Titlebar close button === */
 .window-titlebar button {
+    /* STRUCTURAL */
     background: #c1440e;
     color: #FAF7F2;
     width: 20px;
@@ -164,10 +181,12 @@ body::after {
     justify-content: center;
     font-family: 'Share Tech Mono', monospace;
     flex-shrink: 0;
+
+    /* RETRO */
     border-radius: 0;
     border: 2px solid #ffa641;
     box-shadow: 2px 2px 0px #000;
-    transition: background 0.1s, transform 0.1s;
+    transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
 }
 
 .window-titlebar button:hover {
@@ -181,6 +200,7 @@ body::after {
     box-shadow: none;
 }
 
+/* === Window content === */
 .window-content {
     padding: 20px;
     font-family: 'Share Tech Mono', 'Courier New', monospace;
@@ -194,6 +214,7 @@ body::after {
     margin-bottom: 2px;
 }
 
+/* === Folder / Explorer === */
 .folder-header {
     display: flex;
     justify-content: space-between;
@@ -252,6 +273,7 @@ body::after {
     letter-spacing: 1px;
 }
 
+/* === Carousel === */
 .carousel-viewer {
     display: flex;
     flex-direction: column;
@@ -277,6 +299,7 @@ body::after {
 }
 
 .carousel-controls button {
+    /* STRUCTURAL */
     background: #c1440e;
     color: #FAF7F2;
     width: 32px;
@@ -287,7 +310,9 @@ body::after {
     align-items: center;
     justify-content: center;
     font-family: 'Share Tech Mono', monospace;
-    transition: background 0.1s, transform 0.1s;
+    transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
+
+    /* RETRO */
     border-radius: 0;
     border: 2px solid #ffa641;
     box-shadow: 2px 2px 0px #000;
@@ -306,11 +331,13 @@ body::after {
     letter-spacing: 2px;
 }
 
+/* === Video === */
 .video-viewer iframe {
     display: block;
     width: 100%;
 }
 
+/* === Contact === */
 .contact-link {
     color: #c1440e;
     text-decoration: none;
@@ -326,9 +353,10 @@ body::after {
 .contact-link:hover {
     color: #ffa641;
     text-decoration: underline;
-    text-shadow: 0 0 8px rgba(255, 166, 65, 0.5);
+    text-shadow: 0 0 8px rgba(255,166,65,0.5);
 }
 
+/* === Desktop mascot === */
 .desktop-mascot {
     position: fixed;
     bottom: 48px;
@@ -340,6 +368,7 @@ body::after {
     z-index: 1;
 }
 
+/* === Loading screen === */
 #loading-screen {
     position: fixed;
     top: 0; left: 0;
@@ -370,7 +399,7 @@ body::after {
 .loader {
     border: 3px solid #333;
     border-top: 3px solid #ffa641;
-    border-radius: 0; /* square loader = retro */
+    border-radius: 0; /* square = retro */
     width: 36px;
     height: 36px;
     animation: spin 0.8s linear infinite;
@@ -381,20 +410,12 @@ body::after {
     100% { transform: rotate(360deg); }
 }
 
-/* === Welcome window centering === */
+/* === Welcome window — centered on open === */
 #win-welcome {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 320px;
-}
-
-#win-welcome .window-content p:first-child {
-    font-family: 'VT323', monospace;
-    font-size: 20px;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    color: #2C1A0E;
 }
 
 /* === Mobile === */
@@ -421,16 +442,5 @@ body::after {
     .desktop {
         gap: 12px;
         padding: 16px 12px;
-    }
-
-    body::after {
-        /* heavier scanlines on mobile for feel */
-        background: repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 3px,
-            rgba(0,0,0,0.06) 3px,
-            rgba(0,0,0,0.06) 6px
-        );
     }
 }
