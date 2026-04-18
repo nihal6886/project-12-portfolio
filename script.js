@@ -1,3 +1,4 @@
+// === Clock ===
 function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -7,6 +8,7 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
+// === Window management ===
 function openWindow(name) {
     const win = document.getElementById('win-' + name);
     if (!win) return;
@@ -15,6 +17,7 @@ function openWindow(name) {
 
     if (name === 'carousel') {
         const img = document.getElementById('carousel-img');
+        // Only set if not already showing a valid slide
         if (!img.src || img.src === window.location.href || img.src.endsWith('/')) {
             currentSlide = 1;
             updateCarousel();
@@ -24,6 +27,7 @@ function openWindow(name) {
     if (name === 'podcast') {
         const iframe = document.getElementById('podcast-iframe');
         const savedSrc = iframe.dataset.src;
+        // Restore src from data-src if it was cleared on close
         if (savedSrc && iframe.src !== savedSrc) {
             iframe.src = savedSrc;
         }
@@ -37,6 +41,7 @@ function closeWindow(name) {
 
     if (name === 'podcast') {
         const iframe = document.getElementById('podcast-iframe');
+        // Store real src before clearing, so we can restore it on re-open
         if (!iframe.dataset.src) {
             iframe.dataset.src = iframe.src;
         }
@@ -49,6 +54,7 @@ function bringToFront(win) {
     win.style.zIndex = 20;
 }
 
+// === Dragging ===
 document.querySelectorAll('.window').forEach(win => {
     const titlebar = win.querySelector('.window-titlebar');
     if (!titlebar) return;
@@ -57,6 +63,7 @@ document.querySelectorAll('.window').forEach(win => {
     let offsetX = 0, offsetY = 0;
 
     titlebar.addEventListener('mousedown', (e) => {
+        // Don't start drag if clicking the close button
         if (e.target.tagName === 'BUTTON') return;
         isDragging = true;
         offsetX = e.clientX - win.offsetLeft;
@@ -76,6 +83,7 @@ document.querySelectorAll('.window').forEach(win => {
         titlebar.style.cursor = 'grab';
     });
 
+    // Touch support for mobile
     titlebar.addEventListener('touchstart', (e) => {
         if (e.target.tagName === 'BUTTON') return;
         const touch = e.touches[0];
@@ -96,9 +104,11 @@ document.querySelectorAll('.window').forEach(win => {
         isDragging = false;
     });
 
+    // Click on window body brings it to front
     win.addEventListener('mousedown', () => bringToFront(win));
 });
 
+// === Carousel ===
 let currentSlide = 1;
 const totalSlides = 4;
 
@@ -119,18 +129,13 @@ function prevSlide() {
     updateCarousel();
 }
 
-window.addEventListener('load', function () {
+// === Boot sequence ===
+// === Boot sequence ===
+setTimeout(() => {
     const loadingScreen = document.getElementById('loading-screen');
-    const podcastIframe = document.getElementById('podcast-iframe');
-    if (podcastIframe && podcastIframe.src && !podcastIframe.dataset.src) {
-        podcastIframe.dataset.src = podcastIframe.src;
-    }
-
+    loadingScreen.style.opacity = '0';
     setTimeout(() => {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            openWindow('welcome');
-        }, 500);
-    }, 800); 
-});
+        loadingScreen.style.display = 'none';
+        openWindow('welcome');
+    }, 500);
+}, 1200);

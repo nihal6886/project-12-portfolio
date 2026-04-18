@@ -373,7 +373,7 @@ body::after {
     border-radius: 0; /* square loader = retro */
     width: 36px;
     height: 36px;
-    animation: spin 0.8s steps(8, end) infinite;
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
