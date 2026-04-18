@@ -5,12 +5,11 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Courier New', Courier, monospace; 
     background-color: #e96126;
     height: 100vh;
     overflow: hidden;
 }
-
 .taskbar {
     height: 36px;
     background-color: #e5d4c5;
@@ -64,45 +63,20 @@ body {
 }
 
 .window {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 80px;
-    left: 120px;
-    width: 380px;
-    background-color: #FAF7F2;
-    border-radius: 8px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-    overflow: hidden;
-    min-height: 200px;
+    border-radius: 0 !important; 
+    border: 2px solid #2C1A0E; 
+    box-shadow: 6px 6px 0px #2C1A0E !important; 
 }
 
 .window-titlebar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
-    background-color: #EDE0D4;
-    border-bottom: 1px solid #D6C4B0;
-    cursor: grab;
-    font-size: 13px;
-    font-weight: 500;
-    color: #2C1A0E;
-    user-select: none;
+    border-bottom: 2px solid #2C1A0E;
+    text-transform: uppercase; 
 }
 
-.window-titlebar button {
-    background: #c1440e;
-    border: none;
-    color: #FAF7F2;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.window-titlebar button, .carousel-controls button {
+    border-radius: 0 !important;
+    border: 2px solid #2C1A0E !important;
+    box-shadow: 2px 2px 0px #2C1A0E;
 }
 
 .window-content {
@@ -289,7 +263,10 @@ body {
     }
     
     .desktop {
-        align-items: flex-start;
-        padding: 10px;
-    }
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0) 50%, 
+        rgba(0, 0, 0, 0.08) 50%
+    );
+    background-size: 100% 4px; 
+}
 }
