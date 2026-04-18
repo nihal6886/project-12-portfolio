@@ -272,3 +272,24 @@ body {
     transform: translate(-50%, -50%);
     width: 320px;
 }
+
+@media (max-width: 768px) {
+    .window {
+
+        width: 90% !important; 
+        left: 5% !important; 
+        top: 10% !important; 
+        transform: none !important; 
+    }
+
+    .video-viewer iframe {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9;
+    }
+    
+    .desktop {
+        align-items: flex-start;
+        padding: 10px;
+    }
+}
