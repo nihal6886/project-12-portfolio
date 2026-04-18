@@ -1,14 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* =============================================
+   PALETTE (from screenshot)
+   #f05a00  orange    — dominant (desktop, dot-grid)
+   #e08030  amber     — accent highlights
+   #d4c4a8  warm tan  — taskbar, titlebars
+   #f5efe0  cream     — window content backgrounds
+   #4a1a08  dark brown — borders, text, folders
+   #3a1005  deep brown — box-shadows
+   ============================================= */
+
+:root {
+    --c1:      #f05a00;   /* vivid orange — desktop bg */
+    --c2:      #e08030;   /* amber        — accent */
+    --c3:      #d4c4a8;   /* warm tan     — taskbar, titlebars */
+    --c4:      #f5efe0;   /* cream        — window content */
+    --shadow1: #4a1a08;   /* dark brown   — borders, text */
+    --shadow2: #3a1005;   /* deep brown   — box-shadows */
+    --text:    #4a1a08;   /* body text */
+    --muted:   #8a5a3a;   /* muted text */
 }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Share Tech Mono', 'Courier New', monospace;
-    background-color: #e96126;
+    background-color: var(--c1);   /* salmon desktop */
     height: 100vh;
     overflow: hidden;
     cursor: default;
@@ -26,36 +43,36 @@ body::after {
         0deg,
         transparent,
         transparent 2px,
-        rgba(0,0,0,0.04) 2px,
-        rgba(0,0,0,0.04) 4px
+        rgba(74,26,8,0.05) 2px,
+        rgba(74,26,8,0.05) 4px
     );
 }
 
 /* === Taskbar === */
 .taskbar {
     height: 36px;
-    background-color: #2C1A0E;
+    background-color: var(--c3);        /* tan taskbar */
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
-    color: #ffa641;
+    color: var(--shadow1);              /* dark text on tan */
     font-family: 'VT323', monospace;
     font-size: 18px;
     letter-spacing: 2px;
-    border-bottom: 2px solid #ffa641;
+    border-bottom: 2px solid var(--shadow1);
     position: relative;
     z-index: 1000;
 }
 
 .taskbar-title::before {
     content: '> ';
-    color: #c1440e;
+    color: var(--c2);                   /* amber accent */
 }
 
 .taskbar-clock {
     font-family: 'VT323', monospace;
-    color: #ffa641;
+    color: var(--shadow1);              /* dark clock on tan */
     font-size: 18px;
     letter-spacing: 3px;
 }
@@ -70,8 +87,10 @@ body::after {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
-    background-image: radial-gradient(rgba(0,0,0,0.15) 1px, transparent 1px);
+    /* dot grid using shadow2 for subtle depth on salmon */
+    background-image: radial-gradient(var(--shadow1) 1px, transparent 1px);
     background-size: 24px 24px;
+    background-color: var(--c1);
 }
 
 /* === Icons === */
@@ -88,9 +107,9 @@ body::after {
 }
 
 .icon:hover {
-    background-color: rgba(255,166,65,0.2);
-    border-color: #ffa641;
-    outline: 1px dashed #ffa641;
+    background-color: rgba(245,239,224,0.25);  /* cream tint */
+    border-color: var(--c4);
+    outline: 1px dashed var(--c4);
     outline-offset: 1px;
 }
 
@@ -110,23 +129,23 @@ body::after {
 }
 
 .icon span {
-    color: #FAF7F2;
+    color: var(--c4);                /* cream label */
     font-family: 'VT323', monospace;
     font-size: 14px;
     text-align: center;
-    /* outline-style shadow for readability on orange background */
+    /* outline shadow so cream is readable on salmon */
     text-shadow:
-        1px  1px 0 #2C1A0E,
-       -1px -1px 0 #2C1A0E,
-        1px -1px 0 #2C1A0E,
-       -1px  1px 0 #2C1A0E;
+         1px  1px 0 var(--shadow2),
+        -1px -1px 0 var(--shadow2),
+         1px -1px 0 var(--shadow2),
+        -1px  1px 0 var(--shadow2);
     word-break: break-all;
     letter-spacing: 0.5px;
 }
 
 /* === Window === */
 .window {
-    /* STRUCTURAL — required for display/layout */
+    /* STRUCTURAL */
     display: none;
     flex-direction: column;
     position: absolute;
@@ -134,13 +153,13 @@ body::after {
     left: 120px;
     width: 380px;
     min-height: 200px;
-    background-color: #FAF7F2;
+    background-color: var(--c4);    /* cream content bg */
     z-index: 10;
 
     /* RETRO */
     border-radius: 0;
-    border: 2px solid #2C1A0E;
-    box-shadow: 6px 6px 0px #2C1A0E;
+    border: 2px solid var(--shadow1);
+    box-shadow: 6px 6px 0px var(--shadow2);
 }
 
 /* === Titlebar === */
@@ -150,28 +169,26 @@ body::after {
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    background-color: #2C1A0E;
+    background-color: var(--c3);    /* tan titlebar */
     cursor: grab;
     user-select: none;
 
     /* RETRO */
     font-family: 'VT323', monospace;
     font-size: 16px;
-    color: #ffa641;
+    color: var(--shadow2);          /* deep text on salmon */
     letter-spacing: 2px;
     text-transform: uppercase;
-    border-bottom: 2px solid #2C1A0E;
+    border-bottom: 2px solid var(--shadow1);
 }
 
-.window-titlebar:active {
-    cursor: grabbing;
-}
+.window-titlebar:active { cursor: grabbing; }
 
 /* === Titlebar close button === */
 .window-titlebar button {
     /* STRUCTURAL */
-    background: #c1440e;
-    color: #FAF7F2;
+    background: var(--shadow1);     /* border-red close btn */
+    color: var(--c4);
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -184,15 +201,15 @@ body::after {
 
     /* RETRO */
     border-radius: 0;
-    border: 2px solid #ffa641;
-    box-shadow: 2px 2px 0px #000;
+    border: 2px solid var(--shadow2);
+    box-shadow: 2px 2px 0px var(--shadow2);
     transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
 }
 
 .window-titlebar button:hover {
-    background: #e05010;
+    background: var(--shadow2);
     transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0px #000;
+    box-shadow: 1px 1px 0px var(--shadow2);
 }
 
 .window-titlebar button:active {
@@ -206,13 +223,11 @@ body::after {
     font-family: 'Share Tech Mono', 'Courier New', monospace;
     font-size: 13px;
     line-height: 2;
-    color: #2C1A0E;
+    color: var(--text);
     overflow-y: auto;
 }
 
-.window-content p {
-    margin-bottom: 2px;
-}
+.window-content p { margin-bottom: 2px; }
 
 /* === Folder / Explorer === */
 .folder-header {
@@ -222,9 +237,9 @@ body::after {
     font-family: 'VT323', monospace;
     font-size: 14px;
     letter-spacing: 2px;
-    color: #8a6a50;
-    background: #EDE0D4;
-    border-bottom: 2px solid #2C1A0E;
+    color: var(--muted);
+    background: var(--c3);          /* light peach folder header */
+    border-bottom: 2px solid var(--shadow1);
     text-transform: uppercase;
 }
 
@@ -234,13 +249,13 @@ body::after {
     gap: 12px;
     padding: 9px 14px;
     cursor: pointer;
-    border-bottom: 1px solid #D6C4B0;
+    border-bottom: 1px solid var(--c3);
     transition: background 0.1s;
 }
 
 .folder-item:hover {
-    background: #EDE0D4;
-    outline: 1px dashed #c1440e;
+    background: var(--c3);          /* light peach hover */
+    outline: 1px dashed var(--shadow1);
     outline-offset: -2px;
 }
 
@@ -263,13 +278,13 @@ body::after {
     flex: 1;
     font-family: 'Share Tech Mono', monospace;
     font-size: 13px;
-    color: #2C1A0E;
+    color: var(--text);
 }
 
 .folder-item-type {
     font-family: 'VT323', monospace;
     font-size: 14px;
-    color: #8a6a50;
+    color: var(--muted);
     letter-spacing: 1px;
 }
 
@@ -278,7 +293,7 @@ body::after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #1a1a1a;
+    background: var(--c3);          /* light peach viewer bg */
 }
 
 .carousel-viewer img {
@@ -293,15 +308,16 @@ body::after {
     align-items: center;
     gap: 20px;
     padding: 12px;
-    background: #111;
+    background: var(--c2);          /* peach controls bar */
     width: 100%;
     justify-content: center;
+    border-top: 2px solid var(--shadow1);
 }
 
 .carousel-controls button {
     /* STRUCTURAL */
-    background: #c1440e;
-    color: #FAF7F2;
+    background: var(--shadow1);
+    color: var(--c4);
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -314,18 +330,18 @@ body::after {
 
     /* RETRO */
     border-radius: 0;
-    border: 2px solid #ffa641;
-    box-shadow: 2px 2px 0px #000;
+    border: 2px solid var(--shadow2);
+    box-shadow: 2px 2px 0px var(--shadow2);
 }
 
 .carousel-controls button:hover {
-    background: #a33a0b;
+    background: var(--shadow2);
     transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0px #000;
+    box-shadow: 1px 1px 0px var(--shadow2);
 }
 
 .carousel-controls span {
-    color: #ffa641;
+    color: var(--shadow2);
     font-family: 'VT323', monospace;
     font-size: 16px;
     letter-spacing: 2px;
@@ -339,7 +355,7 @@ body::after {
 
 /* === Contact === */
 .contact-link {
-    color: #c1440e;
+    color: var(--shadow1);
     text-decoration: none;
     font-family: 'Share Tech Mono', monospace;
     transition: color 0.15s;
@@ -347,13 +363,13 @@ body::after {
 
 .contact-link::before {
     content: '> ';
-    color: #ffa641;
+    color: var(--c2);
 }
 
 .contact-link:hover {
-    color: #ffa641;
+    color: var(--shadow2);
     text-decoration: underline;
-    text-shadow: 0 0 8px rgba(255,166,65,0.5);
+    text-shadow: 0 0 8px rgba(74,26,8,0.3);
 }
 
 /* === Desktop mascot === */
@@ -364,7 +380,7 @@ body::after {
     width: 90px;
     image-rendering: pixelated;
     pointer-events: none;
-    opacity: 15%;
+    opacity: 20%;
     z-index: 1;
 }
 
@@ -373,8 +389,8 @@ body::after {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    background-color: #111;
-    color: #ffa641;
+    background-color: var(--shadow2);  /* deep warm for contrast */
+    color: var(--c4);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -390,16 +406,16 @@ body::after {
 
 #loading-screen p:last-child {
     font-size: 14px;
-    color: #8a6a50;
+    color: var(--c2);
     letter-spacing: 2px;
     font-family: 'Share Tech Mono', monospace;
     text-transform: uppercase;
 }
 
 .loader {
-    border: 3px solid #333;
-    border-top: 3px solid #ffa641;
-    border-radius: 0; /* square = retro */
+    border: 3px solid var(--shadow1);
+    border-top: 3px solid var(--c4);
+    border-radius: 0;              /* square = retro */
     width: 36px;
     height: 36px;
     animation: spin 0.8s linear infinite;
@@ -410,7 +426,7 @@ body::after {
     100% { transform: rotate(360deg); }
 }
 
-/* === Welcome window — centered on open === */
+/* === Welcome window — centered === */
 #win-welcome {
     top: 50%;
     left: 50%;
